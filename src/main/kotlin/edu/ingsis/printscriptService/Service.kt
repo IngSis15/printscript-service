@@ -6,7 +6,7 @@ import edu.ingsis.printscriptService.errorHandler.AnalyzeErrorHandler
 import org.springframework.stereotype.Service
 import runner.Runner
 import java.io.ByteArrayInputStream
-import java.util.*
+import java.util.LinkedList
 
 @Service
 class Service {
@@ -24,7 +24,7 @@ class Service {
         return AnalyzeResultDTO(errorHandler.getErrors().isEmpty(), errorHandler.getErrors())
     }
 
-    fun execute(snippet: String, version:String, input: List<String>): ExecuteResultDTO{
+    fun execute(snippet: String, version: String, input: List<String>): ExecuteResultDTO {
         val runner = Runner()
         val errorHandler = AnalyzeErrorHandler()
         val queueInputProvider = QueueInputProvider(LinkedList(input))

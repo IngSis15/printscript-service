@@ -3,7 +3,7 @@ package edu.ingsis.printscriptService.errorHandler
 import edu.ingsis.printscriptService.DTO.ErrorDTO
 import runner.ErrorHandler
 
-class AnalyzeErrorHandler: ErrorHandler {
+class AnalyzeErrorHandler : ErrorHandler {
     private val errors = mutableListOf<ErrorDTO>()
 
     override fun handleError(message: String) {
@@ -13,5 +13,4 @@ class AnalyzeErrorHandler: ErrorHandler {
     fun getErrors(): List<ErrorDTO> {
         return errors
     }
-
 }
