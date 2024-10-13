@@ -1,7 +1,7 @@
 package edu.ingsis.printscriptService
 
-import edu.ingsis.printscriptService.DTO.AnalyzeResultDTO
 import edu.ingsis.printscriptService.DTO.ExecuteResultDTO
+import edu.ingsis.printscriptService.DTO.ResultDTO
 import edu.ingsis.printscriptService.errorHandler.AnalyzeErrorHandler
 import org.springframework.stereotype.Service
 import runner.Runner
@@ -11,7 +11,7 @@ import java.util.LinkedList
 @Service
 class Service {
 
-    fun analyze(snippet: String, version: String): AnalyzeResultDTO {
+    fun analyze(snippet: String, version: String): ResultDTO {
         val runner = Runner()
         val errorHandler = AnalyzeErrorHandler()
 
@@ -21,7 +21,7 @@ class Service {
             errorHandler
         )
 
-        return AnalyzeResultDTO(errorHandler.getErrors().isEmpty(), errorHandler.getErrors())
+        return ResultDTO(errorHandler.getErrors().isEmpty(), errorHandler.getErrors())
     }
 
     fun execute(snippet: String, version: String, input: List<String>): ExecuteResultDTO {

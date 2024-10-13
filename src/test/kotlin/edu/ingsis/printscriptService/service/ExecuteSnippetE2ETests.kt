@@ -1,7 +1,7 @@
 package edu.ingsis.printscriptService.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import edu.ingsis.printscriptService.DTO.RequestDTO
+import edu.ingsis.printscriptService.DTO.ExecuteRequestDTO
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -21,7 +21,7 @@ import java.util.stream.Stream
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class AnalyzeSnippetE2ETests {
+class ExecuteSnippetE2ETests {
 
     @Autowired
     lateinit var mockMvc: MockMvc
@@ -31,36 +31,40 @@ class AnalyzeSnippetE2ETests {
         fun data(): Stream<Arguments> {
             return Stream.of(
                 // Version 1.0
-                Arguments.of("test-valid-assignation", "1.0", true),
-                Arguments.of("test-invalid-assignation", "1.0", false),
-                Arguments.of("test-valid-operation", "1.0", true),
-                Arguments.of("test-invalid-operation", "1.0", false),
-                Arguments.of("test-valid-reassignation", "1.0", true),
-                Arguments.of("test-invalid-reassignation", "1.0", false),
+                Arguments.of("test-hello", "1.0"),
+                Arguments.of("test-assignment", "1.0"),
+                Arguments.of("test-complex-operation", "1.0"),
+                Arguments.of("test-operation", "1.0"),
+                Arguments.of("test-concat-string-number", "1.0"),
+                Arguments.of("test-decimal", "1.0"),
+                Arguments.of("test-declaration", "1.0"),
 
                 // Version 1.1
-                Arguments.of("test-valid-condition", "1.1", true),
-                Arguments.of("test-invalid-condition", "1.1", false),
-                Arguments.of("test-invalid-const-reassignation", "1.1", false),
-
+                Arguments.of("test-conditional", "1.1"),
+                Arguments.of("test-conditional-variable", "1.1"),
+                Arguments.of("test-const", "1.1"),
+                Arguments.of("test-many-inputs", "1.1"),
+                Arguments.of("test-readinput", "1.1"),
             )
         }
     }
 
     @ParameterizedTest
     @MethodSource("data")
-    fun `test analyze snippets`(directory: String, version: String, expectedOk: Boolean) {
-        val snippet = readLines("src/test/resources/analyze/$version/$directory/snippet.ps").joinToString("\n")
+    fun `test execute snippets`(directory: String, version: String) {
+        val snippet = readLines("src/test/resources/execute/$version/$directory/main.ps").joinToString("\n")
+        val expected = readLines("src/test/resources/execute/$version/$directory/expected.txt").joinToString("\n")
+        val input = readLinesIfExists("src/test/resources/execute/$version/$directory/input.txt").orElse(emptyList())
 
-        val body = RequestDTO(snippet, version)
+        val body = ExecuteRequestDTO(snippet, version, input)
 
         mockMvc.perform(
-            MockMvcRequestBuilders.post("/v1/analyze")
+            MockMvcRequestBuilders.post("/v1/execute")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(ObjectMapper().writeValueAsString(body))
         )
             .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.jsonPath("$.ok").value(expectedOk))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.result[0]").value(expected))
     }
 
     @Throws(FileNotFoundException::class)

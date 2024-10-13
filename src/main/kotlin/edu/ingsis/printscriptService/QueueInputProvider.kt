@@ -1,7 +1,7 @@
 package edu.ingsis.printscriptService
 
 import lib.InputProvider
-import java.util.*
+import java.util.Queue
 
 class QueueInputProvider(private val queue: Queue<String>) : InputProvider {
     override fun input(message: String): String {
