@@ -1,11 +1,11 @@
-package edu.ingsis.demo
+package edu.ingsis.printscriptService
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class DemoApplication
+class PrintscriptServiceApplication
 
 fun main(args: Array<String>) {
-    runApplication<DemoApplication>(*args)
+    runApplication<PrintscriptServiceApplication>(*args)
 }
