@@ -19,5 +19,5 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew build
         env:
-          USERNAME: <your-username>
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USERNAME: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
