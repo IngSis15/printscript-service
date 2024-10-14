@@ -27,9 +27,9 @@ jobs:
           push: true
           tags: |
             ghcr.io/ingsis15/printscript-service:latest
-        env:
-          GITHUB_USERNAME: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          build-args: |
+            GITHUB_USERNAME=${{ github.actor }}
+            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
 
       - name: Push to GitHub Packages Dev
         if: github.ref == 'refs/heads/dev'
@@ -39,7 +39,7 @@ jobs:
           push: true
           tags: |
             ghcr.io/ingsis15/printscript-service:dev
-        env:
-          GITHUB_USERNAME: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          build-args: |
+            GITHUB_USERNAME=${{ github.actor }}
+            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
       

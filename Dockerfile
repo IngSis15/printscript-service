@@ -1,6 +1,12 @@
 # Stage 1: Build the application
 FROM gradle:8.10-jdk21 AS builder
 
+ARG GITHUB_USERNAME
+ARG GITHUB_TOKEN
+
+ENV GITHUB_USER=$GITHUB_USERNAME
+ENV GITHUB_TOKEN=$GITHUB_TOKEN
+
 # Set the working directory inside the container
 WORKDIR /app
 
