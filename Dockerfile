@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM gradle:8.1-jdk17 AS builder
+FROM gradle:8.10-jdk21 AS builder
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY src src
 RUN ./gradlew build --no-daemon
 
 # Stage 2: Create the final image
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
