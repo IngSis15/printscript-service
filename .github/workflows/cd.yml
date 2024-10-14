@@ -35,7 +35,7 @@ jobs:
             ghcr.io/ingsis15/printscript-service:latest
 
       - name: Push to GitHub Packages Dev
-        if: github.ref != 'refs/heads/dev'
+        if: github.ref == 'refs/heads/dev'
         id: docker_build_dev
         uses: docker/build-push-action@v4
         with:
