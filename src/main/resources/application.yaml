@@ -4,3 +4,7 @@ server:
 spring:
   application:
     name: printscript-service
+
+services:
+    snippetmanager:
+        url: ${SNIPPETMANAGER_HOST:http://localhost:8080}

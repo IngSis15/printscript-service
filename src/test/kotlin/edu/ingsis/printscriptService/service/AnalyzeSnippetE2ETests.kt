@@ -55,7 +55,7 @@ class AnalyzeSnippetE2ETests {
         val body = RequestDTO(snippet, version)
 
         mockMvc.perform(
-            MockMvcRequestBuilders.post("/v1/analyze")
+            MockMvcRequestBuilders.post("/v1/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(ObjectMapper().writeValueAsString(body))
         )
