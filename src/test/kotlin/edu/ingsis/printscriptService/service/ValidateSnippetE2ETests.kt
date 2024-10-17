@@ -21,7 +21,7 @@ import java.util.stream.Stream
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class AnalyzeSnippetE2ETests {
+class ValidateSnippetE2ETests {
 
     @Autowired
     lateinit var mockMvc: MockMvc
@@ -49,8 +49,8 @@ class AnalyzeSnippetE2ETests {
 
     @ParameterizedTest
     @MethodSource("data")
-    fun `test analyze snippets`(directory: String, version: String, expectedOk: Boolean) {
-        val snippet = readLines("src/test/resources/analyze/$version/$directory/snippet.ps").joinToString("\n")
+    fun `test validate snippets`(directory: String, version: String, expectedOk: Boolean) {
+        val snippet = readLines("src/test/resources/validate/$version/$directory/snippet.ps").joinToString("\n")
 
         val body = RequestDTO(snippet, version)
 
