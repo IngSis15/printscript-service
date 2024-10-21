@@ -20,8 +20,10 @@ COPY settings.gradle .
 # Copy the source files
 COPY src src
 
-# Build the project
-RUN ./gradlew build --no-daemon
+# Use the GitHub token secret during the build process (e.g., for pulling dependencies from a private repository)
+RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN,required \
+    --mount=type=secret,id=github_username,env=GITHUB_USERNAME,required \
+    ./gradlew build --no-daemon
 
 # Stage 2: Create the final image
 FROM eclipse-temurin:21-jre-alpine

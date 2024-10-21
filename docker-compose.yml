@@ -5,12 +5,8 @@ services:
     restart: always
     ports:
       - "9090:9090"
-    depends_on:
-      - postgres
     env_file:
       - .env
-    environment:
-      DB_HOST: postgres
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 1m

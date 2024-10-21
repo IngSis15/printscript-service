@@ -27,7 +27,7 @@ jobs:
           push: true
           tags: |
             ghcr.io/ingsis15/printscript-service:latest
-          build-args: |
+          secrets: |
             GITHUB_USERNAME=${{ github.actor }}
             GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
 
@@ -39,7 +39,8 @@ jobs:
           push: true
           tags: |
             ghcr.io/ingsis15/printscript-service:dev
-          build-args: |
+          secrets: |
             GITHUB_USERNAME=${{ github.actor }}
             GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
-      
+          
+            
