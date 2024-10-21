@@ -1,10 +1,9 @@
-package edu.ingsis.printscriptService.service
+package edu.ingsis.printscriptService
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import edu.ingsis.printscriptService.DTO.ErrorDTO
 import edu.ingsis.printscriptService.DTO.ExecuteResultDTO
 import edu.ingsis.printscriptService.DTO.ResultDTO
-import edu.ingsis.printscriptService.Service
 import org.junit.jupiter.api.TestInstance
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
@@ -20,6 +20,7 @@ import kotlin.test.Test
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ActiveProfiles("test")
 class ConnectWManagerE2ET {
 
     @Autowired
