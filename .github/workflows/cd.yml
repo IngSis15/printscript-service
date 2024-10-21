@@ -28,8 +28,8 @@ jobs:
           tags: |
             ghcr.io/ingsis15/printscript-service:latest
           secrets: |
-            GITHUB_USERNAME=${{ github.actor }}
-            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+            github_username=${{ github.actor }}
+            github_token=${{ secrets.GITHUB_TOKEN }}
 
       - name: Push to GitHub Packages Dev
         if: github.ref == 'refs/heads/dev'
@@ -40,7 +40,7 @@ jobs:
           tags: |
             ghcr.io/ingsis15/printscript-service:dev
           secrets: |
-            GITHUB_USERNAME=${{ github.actor }}
-            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+            github_username=${{ github.actor }}
+            github_token=${{ secrets.GITHUB_TOKEN }}
           
             
