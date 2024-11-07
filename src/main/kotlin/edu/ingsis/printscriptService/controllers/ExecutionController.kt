@@ -1,7 +1,7 @@
 package edu.ingsis.printscriptService.controllers
 
-import edu.ingsis.printscriptService.DTO.ExecuteRequestDTO
-import edu.ingsis.printscriptService.DTO.ExecuteResultDTO
+import edu.ingsis.printscriptService.dto.ExecuteRequestDTO
+import edu.ingsis.printscriptService.dto.ExecuteResultDTO
 import edu.ingsis.printscriptService.services.ExecutionService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -20,7 +20,7 @@ class ExecutionController {
 
     @PostMapping
     fun execute(@RequestBody dto: ExecuteRequestDTO): ResponseEntity<ExecuteResultDTO> {
-        return ResponseEntity.ok(service.execute(dto.snippet, dto.version, dto.input))
+        return ResponseEntity.ok(service.execute(dto.container, dto.key, dto.input))
     }
 
     @PostMapping("/{id}")
