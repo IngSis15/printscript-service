@@ -1,6 +1,6 @@
 package edu.ingsis.printscriptService.services
 
-import edu.ingsis.printscriptService.DTO.ResultDTO
+import edu.ingsis.printscriptService.dto.ResultDTO
 import edu.ingsis.printscriptService.errorHandler.ValidateErrorHandler
 import edu.ingsis.printscriptService.external.manager.ManagerAPI
 import org.springframework.beans.factory.annotation.Autowired

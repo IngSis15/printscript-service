@@ -1,8 +1,8 @@
 package edu.ingsis.printscriptService
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import edu.ingsis.printscriptService.DTO.ErrorDTO
-import edu.ingsis.printscriptService.DTO.ResultDTO
+import edu.ingsis.printscriptService.dto.ErrorDTO
+import edu.ingsis.printscriptService.dto.ResultDTO
+import edu.ingsis.printscriptService.external.asset.AssetService
 import edu.ingsis.printscriptService.services.ValidationService
 import org.junit.jupiter.api.TestInstance
 import org.mockito.Mockito
@@ -29,6 +29,9 @@ class ValidateConnectWManagerE2ET {
     @MockBean
     private lateinit var service: ValidationService
 
+    @MockBean
+    private lateinit var assetService: AssetService
+
     @Test
     fun `test validate by id invalid`() {
         val snippetId = 1L
@@ -39,8 +42,8 @@ class ValidateConnectWManagerE2ET {
         mockMvc.perform(
             MockMvcRequestBuilders.post("/v1/validate/$snippetId")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(ObjectMapper().writeValueAsString(snippetId))
         ).andExpect(MockMvcResultMatchers.jsonPath("$.ok").value(false))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.errors[0].message").value("Snippet is not valid"))
     }
 
     @Test
@@ -53,7 +56,7 @@ class ValidateConnectWManagerE2ET {
         mockMvc.perform(
             MockMvcRequestBuilders.post("/v1/validate/$snippetId")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(ObjectMapper().writeValueAsString(snippetId))
         ).andExpect(MockMvcResultMatchers.jsonPath("$.ok").value(true))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.errors").isEmpty)
     }
 }

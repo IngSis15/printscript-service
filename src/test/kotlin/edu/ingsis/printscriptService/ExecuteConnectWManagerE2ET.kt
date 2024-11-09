@@ -1,7 +1,8 @@
 package edu.ingsis.printscriptService
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import edu.ingsis.printscriptService.DTO.ExecuteResultDTO
+import edu.ingsis.printscriptService.dto.ExecuteResultDTO
+import edu.ingsis.printscriptService.external.asset.AssetService
 import edu.ingsis.printscriptService.services.ExecutionService
 import org.junit.jupiter.api.TestInstance
 import org.mockito.Mockito
@@ -27,6 +28,9 @@ class ExecuteConnectWManagerE2ET {
 
     @MockBean
     private lateinit var service: ExecutionService
+
+    @MockBean
+    private lateinit var assetService: AssetService
 
     @Test
     fun `test execute by id`() {

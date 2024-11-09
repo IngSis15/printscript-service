@@ -1,6 +1,6 @@
 package edu.ingsis.printscriptService.errorHandler
 
-import edu.ingsis.printscriptService.DTO.ErrorDTO
+import edu.ingsis.printscriptService.dto.ErrorDTO
 import runner.ErrorHandler
 
 class ValidateErrorHandler : ErrorHandler {

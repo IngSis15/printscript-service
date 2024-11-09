@@ -1,9 +1,10 @@
 package edu.ingsis.printscriptService.services
 
-import edu.ingsis.printscriptService.DTO.ExecuteResultDTO
+import edu.ingsis.printscriptService.dto.ExecuteResultDTO
 import edu.ingsis.printscriptService.PrintCollector
 import edu.ingsis.printscriptService.QueueInputProvider
 import edu.ingsis.printscriptService.errorHandler.ValidateErrorHandler
+import edu.ingsis.printscriptService.external.asset.AssetService
 import edu.ingsis.printscriptService.external.manager.ManagerAPI
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -12,8 +13,14 @@ import java.io.ByteArrayInputStream
 import java.util.LinkedList
 
 @Component
-class ExecutionService @Autowired constructor(private val snippetManager: ManagerAPI) {
-    fun execute(snippet: String, version: String, input: List<String>): ExecuteResultDTO {
+class ExecutionService @Autowired constructor(
+    private val snippetManager: ManagerAPI,
+    private val assetService: AssetService
+) {
+
+    fun execute(container: String, key: String, input: List<String>): ExecuteResultDTO {
+        val snippet: String = assetService.getAsset(container, key).block() ?: throw RuntimeException("Asset not found")
+
         val runner = Runner()
         val errorHandler = ValidateErrorHandler()
         val queueInputProvider = QueueInputProvider(LinkedList(input))
@@ -21,7 +28,7 @@ class ExecutionService @Autowired constructor(private val snippetManager: Manage
 
         runner.runExecute(
             ByteArrayInputStream(snippet.toByteArray()),
-            version,
+            "1.1",
             errorHandler,
             printCollector,
             queueInputProvider

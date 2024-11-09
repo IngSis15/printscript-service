@@ -1,7 +1,8 @@
 package edu.ingsis.printscriptService
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import edu.ingsis.printscriptService.DTO.RequestDTO
+import edu.ingsis.printscriptService.dto.RequestDTO
+import edu.ingsis.printscriptService.external.asset.AssetService
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -9,6 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
@@ -28,6 +30,9 @@ class ValidateSnippetE2ETests {
     @Autowired
     lateinit var mockMvc: MockMvc
 
+    @MockBean
+    private lateinit var assetService: AssetService
+
     companion object {
         @JvmStatic
         fun data(): Stream<Arguments> {
@@ -43,8 +48,7 @@ class ValidateSnippetE2ETests {
                 // Version 1.1
                 Arguments.of("test-valid-condition", "1.1", true),
                 Arguments.of("test-invalid-condition", "1.1", false),
-                Arguments.of("test-invalid-const-reassignation", "1.1", false),
-
+                Arguments.of("test-invalid-const-reassignation", "1.1", false)
             )
         }
     }

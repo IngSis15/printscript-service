@@ -1,7 +1,7 @@
 package edu.ingsis.printscriptService.controllers
 
-import edu.ingsis.printscriptService.DTO.RequestDTO
-import edu.ingsis.printscriptService.DTO.ResultDTO
+import edu.ingsis.printscriptService.dto.RequestDTO
+import edu.ingsis.printscriptService.dto.ResultDTO
 import edu.ingsis.printscriptService.services.ValidationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
