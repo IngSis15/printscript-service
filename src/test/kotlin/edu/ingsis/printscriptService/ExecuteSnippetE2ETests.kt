@@ -48,7 +48,7 @@ class ExecuteSnippetE2ETests {
     @ParameterizedTest
     @MethodSource("data")
     fun `test execute snippets`(directory: String, version: String) {
-        val container = "exampleContainer"
+        val container = "snippets"
         val key = "$directory/main.ps"
         val snippetContent = readLines("src/test/resources/execute/$version/$directory/main.ps").joinToString("\n")
         val expected = readLines("src/test/resources/execute/$version/$directory/expected.txt").joinToString("\n")
