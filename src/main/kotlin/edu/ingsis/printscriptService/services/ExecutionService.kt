@@ -1,11 +1,11 @@
 package edu.ingsis.printscriptService.services
 
 import edu.ingsis.printscriptService.dto.ExecuteResultDTO
-import edu.ingsis.printscriptService.PrintCollector
-import edu.ingsis.printscriptService.QueueInputProvider
-import edu.ingsis.printscriptService.errorHandler.ValidateErrorHandler
 import edu.ingsis.printscriptService.external.asset.AssetService
 import edu.ingsis.printscriptService.external.manager.ManagerAPI
+import edu.ingsis.printscriptService.utils.PrintCollector
+import edu.ingsis.printscriptService.utils.QueueInputProvider
+import edu.ingsis.printscriptService.utils.ValidateErrorHandler
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import runner.Runner

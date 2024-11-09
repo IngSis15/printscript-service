@@ -1,4 +1,4 @@
-package edu.ingsis.printscriptService
+package edu.ingsis.printscriptService.utils
 
 import lib.InputProvider
 import java.util.Queue

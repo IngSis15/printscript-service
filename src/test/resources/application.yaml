@@ -5,5 +5,5 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
 
 services:
-  snippetmanager:
+  asset:
     url: http://mocked-url-for-test

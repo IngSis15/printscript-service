@@ -1,4 +1,4 @@
-package edu.ingsis.printscriptService.errorHandler
+package edu.ingsis.printscriptService.utils
 
 import edu.ingsis.printscriptService.dto.ErrorDTO
 import runner.ErrorHandler

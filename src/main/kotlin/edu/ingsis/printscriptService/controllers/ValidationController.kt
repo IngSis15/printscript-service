@@ -1,11 +1,9 @@
 package edu.ingsis.printscriptService.controllers
 
-import edu.ingsis.printscriptService.dto.RequestDTO
 import edu.ingsis.printscriptService.dto.ResultDTO
 import edu.ingsis.printscriptService.services.ValidationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -19,17 +17,7 @@ class ValidationController {
     lateinit var service: ValidationService
 
     @PostMapping
-    fun validate(@RequestBody dto: RequestDTO): ResponseEntity<ResultDTO> {
-        return ResponseEntity.ok(service.validate(dto.snippet, dto.version))
+    fun validate(@RequestBody snippet: String): ResponseEntity<ResultDTO> {
+        return ResponseEntity.ok(service.validate(snippet))
     }
-
-    @PostMapping("/{id}")
-    fun validate(@PathVariable id: Long): ResponseEntity<ResultDTO> {
-        return ResponseEntity.ok(service.validateById(id))
-    }
-
-//    @PostMapping("/lint")
-//    fun lint(@RequestBody dto: RequestDTO): ResponseEntity<LintResultDTO> {
-//        return ResponseEntity.ok(service.lint(dto.snippet, dto.version))
-//    }
 }
