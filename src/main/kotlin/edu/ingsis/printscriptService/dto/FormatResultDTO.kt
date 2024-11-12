@@ -1,6 +1,6 @@
 package edu.ingsis.printscriptService.dto
 
-data class LintResultDTO(
+data class FormatResultDTO(
     val snippetId: Long,
-    val ok: Boolean,
+    val formattedContent: String?
 )
