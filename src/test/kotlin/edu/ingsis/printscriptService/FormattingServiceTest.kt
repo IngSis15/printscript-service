@@ -3,25 +3,22 @@ package edu.ingsis.printscriptService
 import edu.ingsis.printscriptService.dto.FormatResultDTO
 import edu.ingsis.printscriptService.external.asset.AssetService
 import edu.ingsis.printscriptService.services.FormattingService
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 import org.mockito.kotlin.anyOrNull
-import org.mockito.junit.jupiter.MockitoSettings
-import org.mockito.quality.Strictness
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import reactor.core.publisher.Mono
-
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
 class FormattingServiceTest {
-
 
     private val assetService: AssetService = mock(AssetService::class.java)
     private val formattingService = FormattingService(assetService)
@@ -36,7 +33,6 @@ class FormattingServiceTest {
 
         assertEquals(1, result.snippetId, "Snippet ID should match.")
     }
-
 
     @Test
     fun `should return null formatted content when config has errors`() {

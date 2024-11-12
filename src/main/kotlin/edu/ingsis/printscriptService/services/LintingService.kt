@@ -36,5 +36,3 @@ class LintingService @Autowired constructor(
         return LintResultDTO(snippetId = snippetId.toLong(), ok = isOk)
     }
 }
-
-

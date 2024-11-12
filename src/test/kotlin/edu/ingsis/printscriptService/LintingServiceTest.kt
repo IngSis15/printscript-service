@@ -3,15 +3,17 @@ package edu.ingsis.printscriptService
 import edu.ingsis.printscriptService.dto.LintResultDTO
 import edu.ingsis.printscriptService.external.asset.AssetService
 import edu.ingsis.printscriptService.services.LintingService
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 import org.mockito.kotlin.anyOrNull
-import org.springframework.boot.actuate.autoconfigure.wavefront.WavefrontProperties
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.ContextConfiguration
 import reactor.core.publisher.Mono
 
 @SpringBootTest
