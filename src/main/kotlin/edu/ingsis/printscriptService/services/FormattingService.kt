@@ -4,7 +4,9 @@ import edu.ingsis.printscriptService.dto.FormatResultDTO
 import edu.ingsis.printscriptService.external.asset.AssetService
 import edu.ingsis.printscriptService.utils.ValidateErrorHandler
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
+import org.springframework.web.server.ResponseStatusException
 import runner.Runner
 import java.io.ByteArrayInputStream
 import java.io.StringWriter
@@ -14,15 +16,17 @@ class FormattingService @Autowired constructor(
     private val assetService: AssetService
 ) {
 
-    private companion object {
-        const val SNIPPETS_CONTAINER = "snippets"
-    }
-
     fun format(snippetId: String, configId: String): FormatResultDTO {
-        val snippet = assetService.getAsset(SNIPPETS_CONTAINER, snippetId).block()
-            ?: throw RuntimeException("Snippet with ID $snippetId not found")
-        val config = assetService.getAsset(SNIPPETS_CONTAINER, configId).block()
-            ?: throw RuntimeException("Config with ID $configId not found")
+        val snippet = assetService.getAsset("snippets" , snippetId).block()
+            ?: throw ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Snippet with ID $snippetId not found"
+            )
+        val config = assetService.getAsset("formatting", configId).block()
+            ?: throw ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Config with ID $configId not found"
+            )
 
         val runner = Runner()
         val errorHandler = ValidateErrorHandler()
@@ -36,7 +40,7 @@ class FormattingService @Autowired constructor(
             errorHandler
         )
 
-        val formattedContent = if (errorHandler.getErrors().isEmpty()) writer.toString() else null
+        val formattedContent = writer.toString()
         return FormatResultDTO(snippetId = snippetId.toLong(), formattedContent = formattedContent)
     }
 }

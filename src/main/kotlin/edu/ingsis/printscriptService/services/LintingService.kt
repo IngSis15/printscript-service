@@ -4,7 +4,9 @@ import edu.ingsis.printscriptService.dto.LintResultDTO
 import edu.ingsis.printscriptService.external.asset.AssetService
 import edu.ingsis.printscriptService.utils.ValidateErrorHandler
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
+import org.springframework.web.server.ResponseStatusException
 import runner.Runner
 import java.io.ByteArrayInputStream
 
@@ -15,15 +17,19 @@ class LintingService @Autowired constructor(
     private val runner = Runner()
     private val errorHandler = ValidateErrorHandler()
 
-    private companion object {
-        const val SNIPPETS_CONTAINER = "snippets"
-    }
-
     fun lint(snippetId: String, configId: String): LintResultDTO {
-        val snippet = assetService.getAsset(SNIPPETS_CONTAINER, snippetId).block()
-            ?: throw RuntimeException("Snippet with ID $snippetId not found")
-        val config = assetService.getAsset(SNIPPETS_CONTAINER, configId).block()
-            ?: throw RuntimeException("Config with ID $configId not found")
+        val snippet = assetService.getAsset("snippets", snippetId).block()
+            ?: throw ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Snippet with ID $snippetId not found"
+            )
+        val config = assetService.getAsset("linting", configId).block()
+            ?: throw ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Config with ID $configId not found"
+            )
+
+        errorHandler.cleanErrors()
 
         runner.runAnalyze(
             ByteArrayInputStream(snippet.toByteArray()),
