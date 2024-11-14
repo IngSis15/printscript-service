@@ -19,7 +19,7 @@ class FormatSnippetConsumer(
     @Value("\${stream.format.key}") streamKey: String,
     private val redisTemplate: RedisTemplate<String, String>,
     private val formattingService: FormattingService,
-    private val assetService : AssetService
+    private val assetService: AssetService
 ) : RedisStreamConsumer<String>(streamKey, "format-group", redisTemplate) {
 
     private val logger = getLogger(FormatSnippetConsumer::class.simpleName)
@@ -28,7 +28,7 @@ class FormatSnippetConsumer(
         return StreamReceiver.StreamReceiverOptions.builder()
             .pollTimeout(java.time.Duration.ofMillis(10000)) // Set poll rate
             .targetType(String::class.java) // Set type to de-serialize record
-            .build();
+            .build()
     }
 
     override fun onMessage(record: ObjectRecord<String, String>) {
@@ -41,5 +41,4 @@ class FormatSnippetConsumer(
             logger.log(System.Logger.Level.ERROR, "Error formatting snippet: ${e.message}")
         }
     }
-
 }

@@ -1,10 +1,8 @@
 package edu.ingsis.printscriptService.redis.consumer.lint
 
-import edu.ingsis.printscriptService.external.asset.AssetService
 import edu.ingsis.printscriptService.redis.consumer.config.RedisStreamConsumer
 import edu.ingsis.printscriptService.redis.consumer.lint.dto.LintSnippetDto
 import edu.ingsis.printscriptService.redis.producer.status.StatusService
-import edu.ingsis.printscriptService.services.FormattingService
 import edu.ingsis.printscriptService.services.LintingService
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -29,7 +27,7 @@ class LintSnippetConsumer(
         return StreamReceiver.StreamReceiverOptions.builder()
             .pollTimeout(java.time.Duration.ofMillis(30000)) // Set poll rate
             .targetType(String::class.java) // Set type to de-serialize record
-            .build();
+            .build()
     }
 
     override fun onMessage(record: ObjectRecord<String, String>) {
@@ -42,5 +40,4 @@ class LintSnippetConsumer(
             logger.log(System.Logger.Level.ERROR, "Error processing message: ${e.message}", e)
         }
     }
-
 }

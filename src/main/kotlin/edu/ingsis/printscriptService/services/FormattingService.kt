@@ -17,7 +17,7 @@ class FormattingService @Autowired constructor(
 ) {
 
     fun format(snippetId: String, configId: String): FormatResultDTO {
-        val snippet = assetService.getAsset("snippets" , snippetId).block()
+        val snippet = assetService.getAsset("snippets", snippetId).block()
             ?: throw ResponseStatusException(
                 HttpStatus.NOT_FOUND,
                 "Snippet with ID $snippetId not found"

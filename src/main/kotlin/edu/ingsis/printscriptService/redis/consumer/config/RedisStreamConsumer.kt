@@ -11,7 +11,6 @@ import org.springframework.data.redis.stream.StreamReceiver
 import reactor.core.publisher.Flux
 import java.net.InetAddress
 
-
 abstract class RedisStreamConsumer<Value>(
     protected val streamKey: String,
     protected val groupId: String,
@@ -30,14 +29,14 @@ abstract class RedisStreamConsumer<Value>(
         try {
             val consumerGroupExists = consumerGroupExists(streamKey, groupId)
             if (!consumerGroupExists) {
-                println("Consumer group ${groupId} for stream ${streamKey} doesn't exist. Creating...")
+                println("Consumer group $groupId for stream $streamKey doesn't exist. Creating...")
                 createConsumerGroup(streamKey, groupId)
             } else {
-                println("Consumer group ${groupId} for stream ${streamKey} exists!")
+                println("Consumer group $groupId for stream $streamKey exists!")
             }
         } catch (e: Exception) {
             println("Exception: $e")
-            println("Stream ${streamKey} doesn't exist. Creating stream ${streamKey} and group ${groupId}")
+            println("Stream $streamKey doesn't exist. Creating stream $streamKey and group $groupId")
             redis.opsForStream<Any, Any>().createGroup(streamKey, groupId)
         }
         val factory = redis.connectionFactory as ReactiveRedisConnectionFactory
@@ -49,18 +48,15 @@ abstract class RedisStreamConsumer<Value>(
         flow.subscribe(this::onMessage)
     }
 
-
     private fun createConsumerGroup(streamKey: String, groupId: String): String {
         return redis.opsForStream<Any, Any>().createGroup(streamKey, groupId)
     }
 
     private fun consumerGroupExists(stream: String, group: String): Boolean {
         val groups = redis.opsForStream<Any, Any>().groups(stream)
-        for(it in groups) {
-            if(it.groupName() == group) return true
+        for (it in groups) {
+            if (it.groupName() == group) return true
         }
         return false
     }
-
-
 }

@@ -12,9 +12,9 @@ class StatusService
 constructor(
     private val lintStatusProducer: LintStatusProducer,
 ) {
-    fun sendStatus( lintResultDto: LintResultDTO
+    fun sendStatus(
+        lintResultDto: LintResultDTO
     ) {
         lintStatusProducer.publishEvent(Json.encodeToString(lintResultDto))
     }
-
 }
