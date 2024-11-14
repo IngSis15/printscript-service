@@ -34,13 +34,16 @@ class FormatSnippetConsumer(
     }
 
     override fun onMessage(record: ObjectRecord<String, String>) {
-        try {
-            val formatSnippetDto = Json.decodeFromString<FormatSnippetDto>(record.value)
-            logger.log(System.Logger.Level.INFO, "Formatting snippet: ${formatSnippetDto.snippetId}")
-            val formatResultDTO = formattingService.format(formatSnippetDto.snippetId.toString(), formatSnippetDto.configId)
-            assetService.createAsset("formatted", formatResultDTO.snippetId.toString(), formatResultDTO.formattedContent).block()
-        } catch (e: Exception) {
-            logger.log(System.Logger.Level.ERROR, "Error formatting snippet: ${e.message}")
-        }
+        val formatSnippetDto = Json.decodeFromString<FormatSnippetDto>(record.value)
+        logger.log(System.Logger.Level.INFO, "Formatting snippet: ${formatSnippetDto.snippetId}")
+
+        formattingService.format(formatSnippetDto.snippetId.toString(), formatSnippetDto.configId)
+            .flatMap { formatResultDTO ->
+                assetService.createAsset("formatted", formatResultDTO.snippetId.toString(), formatResultDTO.formattedContent)
+            }
+            .doOnError { e ->
+                logger.log(System.Logger.Level.ERROR, "Error formatting snippet: ${e.message}")
+            }
+            .subscribe()
     }
 }

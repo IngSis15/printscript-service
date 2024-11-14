@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ResponseStatusException
+import reactor.core.publisher.Mono
 import runner.Runner
 import java.io.ByteArrayInputStream
 import java.io.StringWriter
@@ -16,7 +17,7 @@ class FormattingService @Autowired constructor(
     private val assetService: AssetService
 ) {
 
-    fun format(snippetId: String, configId: String): FormatResultDTO {
+    fun format(snippetId: String, configId: String): Mono<FormatResultDTO> {
         val snippet = assetService.getAsset("snippets", snippetId).block()
             ?: throw ResponseStatusException(
                 HttpStatus.NOT_FOUND,
@@ -41,6 +42,6 @@ class FormattingService @Autowired constructor(
         )
 
         val formattedContent = writer.toString()
-        return FormatResultDTO(snippetId = snippetId.toLong(), formattedContent = formattedContent)
+        return Mono.just(FormatResultDTO(snippetId = snippetId.toLong(), formattedContent = formattedContent))
     }
 }
