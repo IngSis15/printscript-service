@@ -10,6 +10,10 @@ class ValidateErrorHandler : ErrorHandler {
         errors.add(ErrorDTO(message))
     }
 
+    fun cleanErrors() {
+        errors.clear()
+    }
+
     fun getErrors(): List<ErrorDTO> {
         return errors
     }
