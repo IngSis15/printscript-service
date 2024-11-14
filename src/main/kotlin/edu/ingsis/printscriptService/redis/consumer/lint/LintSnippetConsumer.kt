@@ -12,6 +12,8 @@ import org.springframework.data.redis.connection.stream.ObjectRecord
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.stream.StreamReceiver
 import org.springframework.stereotype.Component
+import reactor.core.publisher.Mono
+import reactor.core.scheduler.Schedulers
 import java.lang.System.getLogger
 
 @Component
@@ -33,13 +35,20 @@ class LintSnippetConsumer(
     }
 
     override fun onMessage(record: ObjectRecord<String, String>) {
-        try {
-            val lintingSnippetDto = Json.decodeFromString<LintSnippetDto>(record.value)
-            logger.log(System.Logger.Level.INFO, "Linting snippet: ${lintingSnippetDto.snippetId}")
-            val lintResultDTO = lintingService.lint(lintingSnippetDto.snippetId.toString(), lintingSnippetDto.configId)
-            statusService.sendStatus(lintResultDTO)
-        } catch (e: Exception) {
-            logger.log(System.Logger.Level.ERROR, "Error processing message: ${e.message}", e)
+        val lintingSnippetDto = Json.decodeFromString<LintSnippetDto>(record.value)
+        logger.log(System.Logger.Level.INFO, "Linting snippet: ${lintingSnippetDto.snippetId}")
+
+        Mono.fromCallable {
+            lintingService.lint(lintingSnippetDto.snippetId.toString(), lintingSnippetDto.configId)
         }
+            .flatMap { lintResultDTO ->
+                Mono.fromCallable {
+                    statusService.sendStatus(lintResultDTO)
+                }.publishOn(Schedulers.boundedElastic())
+            }
+            .doOnError { e ->
+                logger.log(System.Logger.Level.ERROR, "Error processing message: ${e.message}", e)
+            }
+            .subscribe()
     }
 }

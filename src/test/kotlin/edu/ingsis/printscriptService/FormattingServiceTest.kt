@@ -4,7 +4,6 @@ import edu.ingsis.printscriptService.dto.FormatResultDTO
 import edu.ingsis.printscriptService.external.asset.AssetService
 import edu.ingsis.printscriptService.services.FormattingService
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -29,7 +28,7 @@ class FormattingServiceTest {
         `when`(assetService.getAsset("snippets", "1")).thenReturn(Mono.just("valid snippet"))
         `when`(assetService.getAsset("formatting", "2")).thenReturn(Mono.just("valid config"))
 
-        val result: FormatResultDTO = formattingService.format("1", "2")
+        val result: FormatResultDTO = formattingService.format("1", "2").block()!!
 
         assertEquals(1, result.snippetId, "Snippet ID should match.")
     }
@@ -40,9 +39,9 @@ class FormattingServiceTest {
         `when`(assetService.getAsset("snippets", "1")).thenReturn(Mono.just("valid snippet"))
         `when`(assetService.getAsset("formatting", "1")).thenReturn(Mono.just("invalid config"))
 
-        val result: FormatResultDTO = formattingService.format("1", "1")
+        val result: FormatResultDTO = formattingService.format("1", "1").block()!!
 
-        assertEquals("",result.formattedContent, "Formatted content should be null if config is invalid.")
+        assertEquals("", result.formattedContent, "Formatted content should be null if config is invalid.")
         assertEquals(1, result.snippetId, "Snippet ID should match.")
     }
 
