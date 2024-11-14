@@ -7,6 +7,7 @@ import edu.ingsis.printscriptService.services.FormattingService
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Profile
 import org.springframework.data.redis.connection.stream.ObjectRecord
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.stream.StreamReceiver
@@ -15,6 +16,7 @@ import java.lang.System.getLogger
 import kotlin.time.Duration
 
 @Component
+@Profile("!test")
 class FormatSnippetConsumer(
     @Value("\${stream.format.key}") streamKey: String,
     private val redisTemplate: RedisTemplate<String, String>,

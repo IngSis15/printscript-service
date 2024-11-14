@@ -7,6 +7,7 @@ import edu.ingsis.printscriptService.services.LintingService
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Profile
 import org.springframework.data.redis.connection.stream.ObjectRecord
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.stream.StreamReceiver
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component
 import java.lang.System.getLogger
 
 @Component
+@Profile("!test")
 class LintSnippetConsumer(
     @Value("\${stream.lint.key}") streamKey: String,
     private val redisTemplate: RedisTemplate<String, String>,

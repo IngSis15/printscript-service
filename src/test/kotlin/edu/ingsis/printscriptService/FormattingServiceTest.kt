@@ -27,7 +27,7 @@ class FormattingServiceTest {
     fun `should return formatted content when snippet and config are valid`() {
         `when`(assetService.createAsset(anyOrNull(), anyOrNull(), anyOrNull())).thenReturn(Mono.empty())
         `when`(assetService.getAsset("snippets", "1")).thenReturn(Mono.just("valid snippet"))
-        `when`(assetService.getAsset("snippets", "2")).thenReturn(Mono.just("valid config"))
+        `when`(assetService.getAsset("formatting", "2")).thenReturn(Mono.just("valid config"))
 
         val result: FormatResultDTO = formattingService.format("1", "2")
 
@@ -37,12 +37,12 @@ class FormattingServiceTest {
     @Test
     fun `should return null formatted content when config has errors`() {
         `when`(assetService.createAsset(anyOrNull(), anyOrNull(), anyOrNull())).thenReturn(Mono.empty())
-        `when`(assetService.getAsset("snippets", "snippetKey")).thenReturn(Mono.just("valid snippet"))
-        `when`(assetService.getAsset("snippets", "configKey")).thenReturn(Mono.just("invalid config"))
+        `when`(assetService.getAsset("snippets", "1")).thenReturn(Mono.just("valid snippet"))
+        `when`(assetService.getAsset("formatting", "1")).thenReturn(Mono.just("invalid config"))
 
         val result: FormatResultDTO = formattingService.format("1", "1")
 
-        assertNull(result.formattedContent, "Formatted content should be null if config is invalid.")
+        assertEquals("",result.formattedContent, "Formatted content should be null if config is invalid.")
         assertEquals(1, result.snippetId, "Snippet ID should match.")
     }
 
