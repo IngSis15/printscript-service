@@ -8,19 +8,21 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import org.mockito.kotlin.anyOrNull
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 import reactor.core.publisher.Mono
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")
-class LintingServiceTest {
-
-    private val assetService: AssetService = mock(AssetService::class.java)
-    private val lintingService = LintingService(assetService)
+class LintingServiceTest @Autowired constructor(
+    @MockBean
+    private val assetService: AssetService,
+    private val lintingService: LintingService
+) {
 
     @Test
     fun `should return ok false when config has errors`() {

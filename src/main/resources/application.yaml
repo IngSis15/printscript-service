@@ -22,6 +22,8 @@ auth0:
 services:
   asset:
     url: ${ASSET_HOST:http://localhost:8081}
+  snippet:
+    url: ${SNIPPET_HOST:http://localhost:8080}
 
 stream:
   lint:
@@ -30,3 +32,7 @@ stream:
     key: "format"
   status:
     key: "status"
+
+groups:
+  format: "formatsnippet"
+  lint: "lintsnippet"

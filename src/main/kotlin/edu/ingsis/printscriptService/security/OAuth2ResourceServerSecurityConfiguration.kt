@@ -29,6 +29,7 @@ class OAuth2ResourceServerSecurityConfiguration(
         http.authorizeHttpRequests {
             it
                 .requestMatchers("/health").permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/").permitAll()
                 .anyRequest().authenticated()
         }
