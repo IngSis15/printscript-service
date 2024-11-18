@@ -37,6 +37,14 @@ repositories {
             password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
         }
     }
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/austral-ingsis/class-redis-streams")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
+            password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
 }
 
 dependencies {
@@ -54,17 +62,18 @@ dependencies {
     implementation 'org.example:lib:1.1.35'
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-api:2.6.0"
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-reactor"
 
     // Security dependencies
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
-    implementation "org.springframework.boot:spring-boot-starter-data-redis-reactive"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-reactor"
+    // Serialization
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
 
-
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-
+    // Redis Streams
+    implementation 'org.austral.ingsis:redis-streams-mvc:0.1.13'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 kotlin {

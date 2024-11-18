@@ -12,7 +12,7 @@ import java.io.ByteArrayInputStream
 
 @Component
 class LintingService @Autowired constructor(
-    private val assetService: AssetService
+    private val assetService: AssetService,
 ) {
     private val runner = Runner()
     private val errorHandler = ValidateErrorHandler()
