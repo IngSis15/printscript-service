@@ -13,6 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.stream.StreamReceiver
 import org.springframework.stereotype.Component
 import java.lang.System.getLogger
+import java.time.Duration
 
 @Component
 @Profile("!test")
@@ -28,16 +29,30 @@ class FormatSnippetConsumer @Autowired constructor(
 
     override fun options(): StreamReceiver.StreamReceiverOptions<String, ObjectRecord<String, String>> {
         return StreamReceiver.StreamReceiverOptions.builder()
-            .pollTimeout(java.time.Duration.ofMillis(10000)) // Set poll rate
+            .pollTimeout(Duration.ofMillis(10000)) // Set poll rate
             .targetType(String::class.java) // Set type to de-serialize record
             .build()
     }
 
     override fun onMessage(record: ObjectRecord<String, String>) {
-        val formatSnippetDto = Json.decodeFromString<FormatSnippetDto>(record.value)
-        logger.log(System.Logger.Level.INFO, "Formatting snippet: ${formatSnippetDto.snippetId}")
+        val startTime = System.currentTimeMillis()
 
-        val result = formattingService.format(formatSnippetDto.snippetId.toString(), formatSnippetDto.configId)
-        assetService.createAsset("formatted", result.snippetId.toString(), result.formattedContent).block()
+        try {
+            val formatSnippetDto = Json.decodeFromString<FormatSnippetDto>(record.value)
+            logger.log(System.Logger.Level.INFO, "Received message to format snippet: ${formatSnippetDto.snippetId}")
+
+            val result = formattingService.format(formatSnippetDto.snippetId.toString(), formatSnippetDto.configId)
+            logger.log(System.Logger.Level.INFO, "Formatting result for snippet: ${formatSnippetDto.snippetId}, content length: ${result.formattedContent.length}")
+
+            // Create asset after formatting
+            assetService.createAsset("formatted", result.snippetId.toString(), result.formattedContent).block()
+            logger.log(System.Logger.Level.INFO, "Formatted snippet ${formatSnippetDto.snippetId} successfully created as asset")
+
+        } catch (e: Exception) {
+            logger.log(System.Logger.Level.ERROR, "Error processing snippet format: ${record.value}", e)
+        } finally {
+            val endTime = System.currentTimeMillis()
+            logger.log(System.Logger.Level.INFO, "Processing time for snippet ${record.value}: ${endTime - startTime}ms")
+        }
     }
 }
