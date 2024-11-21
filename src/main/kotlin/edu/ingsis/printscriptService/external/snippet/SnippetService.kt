@@ -18,7 +18,6 @@ class SnippetService(
 
     @PostConstruct
     fun init() {
-        logger.log(Level.INFO, "Initializing WebClient for SnippetService with base URL: $baseUrl")
         webClient = WebClient.create(baseUrl)
     }
 

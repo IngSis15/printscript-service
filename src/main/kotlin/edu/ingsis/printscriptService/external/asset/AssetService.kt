@@ -19,7 +19,6 @@ class AssetService(
 
     @PostConstruct
     fun init() {
-        logger.log(Level.INFO, "Initializing WebClient for AssetService with base URL: $baseUrl")
         webClient = WebClient.create(baseUrl)
     }
 
