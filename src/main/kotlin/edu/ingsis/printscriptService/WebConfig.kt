@@ -15,8 +15,12 @@ class WebConfig : WebMvcConfigurer {
     override fun addCorsMappings(registry: CorsRegistry) {
         logger.info("Configuring CORS settings with allowed origins and methods")
 
-        registry.addMapping("/**")
-            .allowedOrigins("http://localhost:5173", "http://localhost", "https://snippetsearcher.westus2.cloudapp.azure.com", "https://snippetsearcherdev.westus2.cloudapp.azure.com").allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS").allowedHeaders("*")
+        registry.addMapping("/**").allowedOrigins(
+            "http://localhost:5173",
+            "http://localhost",
+            "https://snippetsearcher.westus2.cloudapp.azure.com",
+            "https://snippetsearcherdev.westus2.cloudapp.azure.com"
+        ).allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS").allowedHeaders("*")
 
         logger.info(
             "CORS configured for allowed origins: " +
