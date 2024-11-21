@@ -60,5 +60,4 @@ class OAuth2ResourceServerSecurityConfiguration(
             throw e
         }
     }
-
 }

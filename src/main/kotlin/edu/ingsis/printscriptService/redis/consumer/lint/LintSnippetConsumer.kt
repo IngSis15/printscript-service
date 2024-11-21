@@ -56,7 +56,6 @@ class LintSnippetConsumer @Autowired constructor(
                     logger.log(System.Logger.Level.ERROR, "Failed to update lint status for snippet ${lintingSnippetDto.snippetId}: ${error.message}", error)
                 }
                 .subscribe()
-
         } catch (e: Exception) {
             logger.log(System.Logger.Level.ERROR, "Error processing lint for message: ${record.value}", e)
         } finally {

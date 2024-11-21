@@ -26,7 +26,8 @@ class ValidationController {
         val result = service.validate(snippet)
         logger.info(
             "Validation completed. Success: {}. Error count: {}",
-            result.ok, result.errors.size
+            result.ok,
+            result.errors.size
         )
 
         return ResponseEntity.ok(result)

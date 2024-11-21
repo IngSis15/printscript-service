@@ -43,7 +43,9 @@ class ExecutionService @Autowired constructor(
         val result = ExecuteResultDTO(printCollector.getMessages())
         logger.info(
             "Execution completed successfully for container='{}', key='{}'. Result size: {}",
-            container, key, result.result.size
+            container,
+            key,
+            result.result.size
         )
 
         return result
