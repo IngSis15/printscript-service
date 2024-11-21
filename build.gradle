@@ -6,7 +6,7 @@ plugins {
 	id 'org.springframework.boot' version '3.3.4'
 	id 'io.spring.dependency-management' version '1.1.6'
     id 'org.jlleitschuh.gradle.ktlint' version '10.2.0'
-    id 'org.jetbrains.kotlinx.kover' version '0.4.0'
+    id 'org.jetbrains.kotlinx.kover' version '0.9.0-RC'
 
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.0'
 }
@@ -56,7 +56,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.example:runner:1.1.35'
     implementation 'org.example:lib:1.1.35'
@@ -94,6 +93,18 @@ ktlint {
         include("**/kotlin/**")
     }
 }
+
+kover {
+    currentProject {
+        instrumentation {
+            excludedClasses.add("edu.ingsis.printscriptService.external.*")
+            excludedClasses.add("edu.ingsis.printscriptService.redis.consumer.*")
+            excludedClasses.add("edu.ingsis.printscriptService.security.*")
+        }
+    }
+}
+
+
 
 tasks.withType(KtLintCheckTask).configureEach {
     dependsOn("ktlintFormat")
