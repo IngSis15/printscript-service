@@ -37,14 +37,30 @@ class LintSnippetConsumer @Autowired constructor(
     }
 
     override fun onMessage(record: ObjectRecord<String, String>) {
-        val lintingSnippetDto = Json.decodeFromString<LintSnippetDto>(record.value)
-        logger.log(System.Logger.Level.INFO, "Linting snippet: ${lintingSnippetDto.snippetId}")
-        val result = lintingService.lint(lintingSnippetDto.snippetId.toString(), lintingSnippetDto.configId)
+        val startTime = System.currentTimeMillis()
+        try {
+            val lintingSnippetDto = Json.decodeFromString<LintSnippetDto>(record.value)
+            logger.log(System.Logger.Level.INFO, "Received message to lint snippet: ${lintingSnippetDto.snippetId}")
 
-        if (result.ok) {
-            snippetApi.updateLintStatus(StatusDto(lintingSnippetDto.snippetId, Compliance.COMPLIANT)).subscribe()
-        } else {
-            snippetApi.updateLintStatus(StatusDto(lintingSnippetDto.snippetId, Compliance.NON_COMPLIANT)).subscribe()
+            // Process linting
+            val result = lintingService.lint(lintingSnippetDto.snippetId.toString(), lintingSnippetDto.configId)
+            logger.log(System.Logger.Level.INFO, "Linting result for snippet ${lintingSnippetDto.snippetId}: ${result.ok}")
+
+            // Update lint status based on result
+            val complianceStatus = if (result.ok) Compliance.COMPLIANT else Compliance.NON_COMPLIANT
+            snippetApi.updateLintStatus(StatusDto(lintingSnippetDto.snippetId, complianceStatus))
+                .doOnSuccess {
+                    logger.log(System.Logger.Level.INFO, "Successfully updated lint status for snippet ${lintingSnippetDto.snippetId} to $complianceStatus")
+                }
+                .doOnError { error ->
+                    logger.log(System.Logger.Level.ERROR, "Failed to update lint status for snippet ${lintingSnippetDto.snippetId}: ${error.message}", error)
+                }
+                .subscribe()
+        } catch (e: Exception) {
+            logger.log(System.Logger.Level.ERROR, "Error processing lint for message: ${record.value}", e)
+        } finally {
+            val endTime = System.currentTimeMillis()
+            logger.log(System.Logger.Level.INFO, "Processing time for snippet ${record.value}: ${endTime - startTime}ms")
         }
     }
 }
