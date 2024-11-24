@@ -95,11 +95,22 @@ ktlint {
 }
 
 kover {
-    currentProject {
-        instrumentation {
-            excludedClasses.add("edu.ingsis.printscriptService.external.*")
-            excludedClasses.add("edu.ingsis.printscriptService.redis.consumer.*")
-            excludedClasses.add("edu.ingsis.printscriptService.security.*")
+    reports {
+        filters {
+            excludes {
+                packages(
+                        "edu.ingsis.printscriptService.external",
+                        "edu.ingsis.printscriptService.redis",
+                        "edu.ingsis.printscriptService.security",
+                )
+
+            }
+        }
+
+        verify {
+            rule {
+                minBound(80)
+            }
         }
     }
 }
