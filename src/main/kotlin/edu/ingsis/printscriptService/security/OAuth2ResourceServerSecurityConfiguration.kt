@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.JwtValidators
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
 import org.springframework.security.web.SecurityFilterChain
+import java.lang.System.getLogger
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +25,9 @@ class OAuth2ResourceServerSecurityConfiguration(
     @Value("\${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
     val issuer: String,
 ) {
+
+    private val logger = getLogger(AudienceValidator::class.simpleName)
+
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http.authorizeHttpRequests {
@@ -42,10 +46,18 @@ class OAuth2ResourceServerSecurityConfiguration(
     @Bean
     fun jwtDecoder(): JwtDecoder {
         val jwtDecoder = NimbusJwtDecoder.withIssuerLocation(issuer).build()
+
         val audienceValidator: OAuth2TokenValidator<Jwt> = AudienceValidator(audience)
         val withIssuer: OAuth2TokenValidator<Jwt> = JwtValidators.createDefaultWithIssuer(issuer)
         val withAudience: OAuth2TokenValidator<Jwt> = DelegatingOAuth2TokenValidator(withIssuer, audienceValidator)
+
         jwtDecoder.setJwtValidator(withAudience)
-        return jwtDecoder
+
+        try {
+            return jwtDecoder
+        } catch (e: Exception) {
+            logger.log(System.Logger.Level.ERROR, "Error configuring JWT decoder: ${e.message}", e)
+            throw e
+        }
     }
 }
