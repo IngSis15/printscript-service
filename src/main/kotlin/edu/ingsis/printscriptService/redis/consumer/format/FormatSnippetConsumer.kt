@@ -5,6 +5,7 @@ import edu.ingsis.printscriptService.redis.consumer.format.dto.FormatSnippetDto
 import edu.ingsis.printscriptService.services.FormattingService
 import kotlinx.serialization.json.Json
 import org.austral.ingsis.redis.RedisStreamConsumer
+import org.slf4j.MDC
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
@@ -39,13 +40,14 @@ class FormatSnippetConsumer @Autowired constructor(
 
         try {
             val formatSnippetDto = Json.decodeFromString<FormatSnippetDto>(record.value)
+            MDC.put("correlation-id", formatSnippetDto.correlationId)
             logger.log(System.Logger.Level.INFO, "Received message to format snippet: ${formatSnippetDto.snippetId}")
 
             val result = formattingService.format(formatSnippetDto.snippetId.toString(), formatSnippetDto.configId)
             logger.log(System.Logger.Level.INFO, "Formatting result for snippet: ${formatSnippetDto.snippetId}, content length: ${result.formattedContent.length}")
 
             // Create asset after formatting
-            assetService.createAsset("formatted", result.snippetId.toString(), result.formattedContent).block()
+            assetService.createAsset("formatted", result.snippetId.toString(), result.formattedContent)
             logger.log(System.Logger.Level.INFO, "Formatted snippet ${formatSnippetDto.snippetId} successfully created as asset")
         } catch (e: Exception) {
             logger.log(System.Logger.Level.ERROR, "Error processing snippet format: ${record.value}", e)

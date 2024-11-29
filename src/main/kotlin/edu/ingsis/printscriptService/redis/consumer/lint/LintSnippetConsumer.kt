@@ -7,6 +7,7 @@ import edu.ingsis.printscriptService.redis.consumer.lint.dto.LintSnippetDto
 import edu.ingsis.printscriptService.services.LintingService
 import kotlinx.serialization.json.Json
 import org.austral.ingsis.redis.RedisStreamConsumer
+import org.slf4j.MDC
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
@@ -40,6 +41,7 @@ class LintSnippetConsumer @Autowired constructor(
         val startTime = System.currentTimeMillis()
         try {
             val lintingSnippetDto = Json.decodeFromString<LintSnippetDto>(record.value)
+            MDC.put("correlation-id", lintingSnippetDto.correlationId)
             logger.log(System.Logger.Level.INFO, "Received message to lint snippet: ${lintingSnippetDto.snippetId}")
 
             // Process linting
@@ -48,14 +50,19 @@ class LintSnippetConsumer @Autowired constructor(
 
             // Update lint status based on result
             val complianceStatus = if (result.ok) Compliance.COMPLIANT else Compliance.NON_COMPLIANT
-            snippetApi.updateLintStatus(StatusDto(lintingSnippetDto.snippetId, complianceStatus))
-                .doOnSuccess {
-                    logger.log(System.Logger.Level.INFO, "Successfully updated lint status for snippet ${lintingSnippetDto.snippetId} to $complianceStatus")
-                }
-                .doOnError { error ->
-                    logger.log(System.Logger.Level.ERROR, "Failed to update lint status for snippet ${lintingSnippetDto.snippetId}: ${error.message}", error)
-                }
-                .subscribe()
+            try {
+                snippetApi.updateLintStatus(StatusDto(lintingSnippetDto.snippetId, complianceStatus))
+                logger.log(
+                    System.Logger.Level.INFO,
+                    "Successfully updated lint status for snippet ${lintingSnippetDto.snippetId} to $complianceStatus"
+                )
+            } catch (error: Exception) {
+                logger.log(
+                    System.Logger.Level.ERROR,
+                    "Failed to update lint status for snippet ${lintingSnippetDto.snippetId}: ${error.message}",
+                    error
+                )
+            }
         } catch (e: Exception) {
             logger.log(System.Logger.Level.ERROR, "Error processing lint for message: ${record.value}", e)
         } finally {

@@ -12,7 +12,6 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.anyOrNull
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import reactor.core.publisher.Mono
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -24,9 +23,9 @@ class FormattingServiceTest {
 
     @Test
     fun `should return formatted content when snippet and config are valid`() {
-        `when`(assetService.createAsset(anyOrNull(), anyOrNull(), anyOrNull())).thenReturn(Mono.empty())
-        `when`(assetService.getAsset("snippets", "1")).thenReturn(Mono.just("valid snippet"))
-        `when`(assetService.getAsset("formatting", "2")).thenReturn(Mono.just("valid config"))
+        `when`(assetService.createAsset(anyOrNull(), anyOrNull(), anyOrNull())).thenAnswer { }
+        `when`(assetService.getAsset("snippets", "1")).thenReturn(("valid snippet"))
+        `when`(assetService.getAsset("formatting", "2")).thenReturn(("valid config"))
 
         val result: FormatResultDTO = formattingService.format("1", "2")
 
@@ -35,9 +34,9 @@ class FormattingServiceTest {
 
     @Test
     fun `should return null formatted content when config has errors`() {
-        `when`(assetService.createAsset(anyOrNull(), anyOrNull(), anyOrNull())).thenReturn(Mono.empty())
-        `when`(assetService.getAsset("snippets", "1")).thenReturn(Mono.just("valid snippet"))
-        `when`(assetService.getAsset("formatting", "1")).thenReturn(Mono.just("invalid config"))
+        `when`(assetService.createAsset(anyOrNull(), anyOrNull(), anyOrNull())).thenAnswer { }
+        `when`(assetService.getAsset("snippets", "1")).thenReturn(("valid snippet"))
+        `when`(assetService.getAsset("formatting", "1")).thenReturn(("invalid config"))
 
         val result: FormatResultDTO = formattingService.format("1", "1")
 
@@ -47,8 +46,7 @@ class FormattingServiceTest {
 
     @Test
     fun `should throw exception when snippet not found`() {
-        `when`(assetService.getAsset("snippets", "snippetKey")).thenReturn(Mono.empty())
-        `when`(assetService.getAsset("snippets", "configKey")).thenReturn(Mono.just("valid config"))
+        `when`(assetService.getAsset("snippets", "snippetKey")).thenReturn(null)
 
         assertThrows(RuntimeException::class.java) {
             formattingService.format("1", "1")
@@ -58,8 +56,8 @@ class FormattingServiceTest {
     @Test
     fun `should throw exception when config not found`() {
         // Mocking config not found (Mono.empty() for config)
-        `when`(assetService.getAsset("snippets", "snippetKey")).thenReturn(Mono.just("valid snippet"))
-        `when`(assetService.getAsset("snippets", "configKey")).thenReturn(Mono.empty())
+        `when`(assetService.getAsset("snippets", "snippetKey")).thenReturn(("valid snippet"))
+        `when`(assetService.getAsset("snippets", "configKey")).thenAnswer { }
 
         assertThrows(RuntimeException::class.java) {
             formattingService.format("1", "1")

@@ -22,14 +22,14 @@ class FormattingService @Autowired constructor(
     fun format(snippetId: String, configId: String): FormatResultDTO {
         logger.info("Request received to format snippet with ID: $snippetId using config ID: $configId")
 
-        val snippet = assetService.getAsset("snippets", snippetId).block()
+        val snippet = assetService.getAsset("snippets", snippetId)
         if (snippet == null) {
             logger.error("Snippet with ID $snippetId not found")
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Snippet with ID $snippetId not found")
         }
         logger.info("Snippet with ID $snippetId found successfully")
 
-        val config = assetService.getAsset("formatting", configId).block()
+        val config = assetService.getAsset("formatting", configId)
         if (config == null) {
             logger.error("Config with ID $configId not found")
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Config with ID $configId not found")
