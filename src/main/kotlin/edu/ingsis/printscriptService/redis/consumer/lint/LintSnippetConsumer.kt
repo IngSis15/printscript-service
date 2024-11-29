@@ -7,6 +7,7 @@ import edu.ingsis.printscriptService.redis.consumer.lint.dto.LintSnippetDto
 import edu.ingsis.printscriptService.services.LintingService
 import kotlinx.serialization.json.Json
 import org.austral.ingsis.redis.RedisStreamConsumer
+import org.slf4j.MDC
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
@@ -40,6 +41,7 @@ class LintSnippetConsumer @Autowired constructor(
         val startTime = System.currentTimeMillis()
         try {
             val lintingSnippetDto = Json.decodeFromString<LintSnippetDto>(record.value)
+            MDC.put("correlation-id", lintingSnippetDto.correlationId)
             logger.log(System.Logger.Level.INFO, "Received message to lint snippet: ${lintingSnippetDto.snippetId}")
 
             // Process linting
