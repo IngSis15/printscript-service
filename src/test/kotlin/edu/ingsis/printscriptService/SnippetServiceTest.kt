@@ -31,7 +31,7 @@ constructor(
         val statusDto = StatusDto(12345L, Compliance.PENDING)
         val statusDtoJson = objectMapper.writeValueAsString(statusDto)
 
-        Mockito.`when`(snippetService.updateLintStatus(statusDto)).thenReturn(Mono.empty())
+        Mockito.`when`(snippetService.updateLintStatus(statusDto)).thenAnswer {  }
 
         mockMvc.perform(
             MockMvcRequestBuilders.post("/v1/snippet/status")

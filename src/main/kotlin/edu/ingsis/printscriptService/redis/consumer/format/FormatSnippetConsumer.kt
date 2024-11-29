@@ -45,7 +45,7 @@ class FormatSnippetConsumer @Autowired constructor(
             logger.log(System.Logger.Level.INFO, "Formatting result for snippet: ${formatSnippetDto.snippetId}, content length: ${result.formattedContent.length}")
 
             // Create asset after formatting
-            assetService.createAsset("formatted", result.snippetId.toString(), result.formattedContent).block()
+            assetService.createAsset("formatted", result.snippetId.toString(), result.formattedContent)
             logger.log(System.Logger.Level.INFO, "Formatted snippet ${formatSnippetDto.snippetId} successfully created as asset")
         } catch (e: Exception) {
             logger.log(System.Logger.Level.ERROR, "Error processing snippet format: ${record.value}", e)

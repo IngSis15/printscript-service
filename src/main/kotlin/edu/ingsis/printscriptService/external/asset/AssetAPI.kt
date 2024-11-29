@@ -6,16 +6,16 @@ interface AssetAPI {
     fun getAsset(
         container: String,
         key: String,
-    ): Mono<String>
+    ): String?
 
     fun createAsset(
         container: String,
         key: String,
         content: String,
-    ): Mono<Void>
+    )
 
     fun deleteAsset(
         container: String,
         key: String,
-    ): Mono<Void>
+    )
 }

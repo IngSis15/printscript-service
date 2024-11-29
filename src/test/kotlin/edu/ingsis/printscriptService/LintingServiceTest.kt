@@ -26,8 +26,8 @@ class LintingServiceTest @Autowired constructor(
 
     @Test
     fun `should return ok false when config has errors`() {
-        `when`(assetService.getAsset(anyOrNull(), anyOrNull())).thenReturn(Mono.just("valid snippet content"))
-        `when`(assetService.getAsset(anyOrNull(), anyOrNull())).thenReturn(Mono.just("invalid config content"))
+        `when`(assetService.getAsset(anyOrNull(), anyOrNull())).thenReturn(("valid snippet content"))
+        `when`(assetService.getAsset(anyOrNull(), anyOrNull())).thenReturn(("invalid config content"))
 
         val result: LintResultDTO = lintingService.lint("1", "2")
 
