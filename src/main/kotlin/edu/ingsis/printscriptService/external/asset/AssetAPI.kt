@@ -1,7 +1,5 @@
 package edu.ingsis.printscriptService.external.asset
 
-import reactor.core.publisher.Mono
-
 interface AssetAPI {
     fun getAsset(
         container: String,
