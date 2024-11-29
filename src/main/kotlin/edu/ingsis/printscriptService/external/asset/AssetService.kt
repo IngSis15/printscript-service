@@ -1,6 +1,5 @@
 package edu.ingsis.printscriptService.external.asset
 
-import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -16,15 +15,10 @@ import java.util.logging.Logger
 @Component
 class AssetService(
     @Value("\${services.asset.url}") val baseUrl: String,
+    val restTemplate: RestTemplate
 ) : AssetAPI {
 
     private val logger: Logger = Logger.getLogger(AssetService::class.java.name)
-    private lateinit var restTemplate: RestTemplate
-
-    @PostConstruct
-    fun init() {
-        restTemplate = RestTemplate()
-    }
 
     override fun getAsset(container: String, key: String): String? {
         logger.log(Level.INFO, "Fetching asset from container: $container with key: $key")

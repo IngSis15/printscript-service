@@ -1,7 +1,6 @@
 package edu.ingsis.printscriptService.external.snippet
 
 import edu.ingsis.printscriptService.external.snippet.dto.StatusDto
-import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpEntity
@@ -18,15 +17,10 @@ import java.util.logging.Logger
 @Profile("!test")
 class SnippetService(
     @Value("\${services.snippet.url}") val baseUrl: String,
+    val restTemplate: RestTemplate
 ) : SnippetApi {
 
-    private lateinit var restTemplate: RestTemplate
     private val logger: Logger = Logger.getLogger(SnippetService::class.java.name)
-
-    @PostConstruct
-    fun init() {
-        restTemplate = RestTemplate()
-    }
 
     override fun updateLintStatus(statusDto: StatusDto) {
         logger.log(Level.INFO, "Updating lint status with payload: $statusDto")
