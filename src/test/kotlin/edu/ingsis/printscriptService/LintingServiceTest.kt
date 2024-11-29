@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
-import reactor.core.publisher.Mono
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -26,8 +25,8 @@ class LintingServiceTest @Autowired constructor(
 
     @Test
     fun `should return ok false when config has errors`() {
-        `when`(assetService.getAsset(anyOrNull(), anyOrNull())).thenReturn(Mono.just("valid snippet content"))
-        `when`(assetService.getAsset(anyOrNull(), anyOrNull())).thenReturn(Mono.just("invalid config content"))
+        `when`(assetService.getAsset(anyOrNull(), anyOrNull())).thenReturn(("valid snippet content"))
+        `when`(assetService.getAsset(anyOrNull(), anyOrNull())).thenReturn(("invalid config content"))
 
         val result: LintResultDTO = lintingService.lint("1", "2")
 

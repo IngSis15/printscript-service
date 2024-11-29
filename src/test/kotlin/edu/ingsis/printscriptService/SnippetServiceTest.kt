@@ -13,7 +13,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import reactor.core.publisher.Mono
 
 @WebMvcTest(SnippetService::class)
 @AutoConfigureMockMvc
@@ -31,7 +30,7 @@ constructor(
         val statusDto = StatusDto(12345L, Compliance.PENDING)
         val statusDtoJson = objectMapper.writeValueAsString(statusDto)
 
-        Mockito.`when`(snippetService.updateLintStatus(statusDto)).thenReturn(Mono.empty())
+        Mockito.`when`(snippetService.updateLintStatus(statusDto)).thenAnswer { }
 
         mockMvc.perform(
             MockMvcRequestBuilders.post("/v1/snippet/status")

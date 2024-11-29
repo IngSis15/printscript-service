@@ -22,7 +22,7 @@ class ExecutionService @Autowired constructor(
     fun execute(container: String, key: String, input: List<String>): ExecuteResultDTO {
         logger.info("Starting execution for container='{}', key='{}'", container, key)
 
-        val snippet: String = assetService.getAsset(container, key).block()
+        val snippet: String = assetService.getAsset(container, key)
             ?: throw RuntimeException("Asset not found for container='$container', key='$key'")
         logger.info("Snippet retrieved successfully. Size: {} characters", snippet.length)
 

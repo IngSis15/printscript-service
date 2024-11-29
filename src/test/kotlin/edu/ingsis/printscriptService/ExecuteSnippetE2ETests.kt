@@ -17,7 +17,6 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import reactor.core.publisher.Mono
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.Optional
@@ -54,7 +53,7 @@ class ExecuteSnippetE2ETests {
         val expected = readLines("src/test/resources/execute/$version/$directory/expected.txt").joinToString("\n")
         val input = readLinesIfExists("src/test/resources/execute/$version/$directory/input.txt").orElse(emptyList())
 
-        Mockito.`when`(assetService.getAsset(container, key)).thenReturn(Mono.just(snippetContent))
+        Mockito.`when`(assetService.getAsset(container, key)).thenReturn(snippetContent)
 
         val body = ExecuteRequestDTO(container, key, input)
 
